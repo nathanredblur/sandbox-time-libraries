@@ -1,0 +1,23 @@
+{
+  "name": "test-string-to-time-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "chrono-node": "2.9.0",
+    "any-date-parser": "2.2.3",
+    "dayjs": "1.11.19",
+    "fecha": "4.2.3",
+    "luxon": "3.7.2",
+    "date-fns": "4.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.2.0",
+    "parcel-bundler": "^1.6.1"
+  },
+  "keywords": []
+}
