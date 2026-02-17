@@ -31,6 +31,9 @@ devDependencies:
   '@babel/core':
     specifier: 7.2.0
     version: 7.2.0
+  '@parcel/reporter-bundle-analyzer':
+    specifier: ^2.16.4
+    version: 2.16.4(@parcel/core@2.16.4)
   parcel:
     specifier: ^2.0.0
     version: 2.16.4
@@ -1744,6 +1747,18 @@ packages:
       '@parcel/events': 2.16.4
       '@parcel/types-internal': 2.16.4
       chrome-trace-event: 1.0.4
+    dev: true
+
+  /@parcel/reporter-bundle-analyzer@2.16.4(@parcel/core@2.16.4):
+    resolution: {integrity: sha512-uFwQbufcBkEuui2yhUcslhzlej4nF4yjxmB7MFg4CZzXIkVDI4mAmnx89G9wrlgJI85EhLU1df85GqoImeU1mA==}
+    engines: {node: '>= 16.0.0', parcel: ^2.16.4}
+    dependencies:
+      '@parcel/plugin': 2.16.4(@parcel/core@2.16.4)
+      '@parcel/utils': 2.16.4
+      nullthrows: 1.1.1
+    transitivePeerDependencies:
+      - '@parcel/core'
+      - napi-wasm
     dev: true
 
   /@parcel/reporter-cli@2.16.4(@parcel/core@2.16.4):
