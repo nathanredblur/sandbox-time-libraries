@@ -2,22 +2,22 @@
   "name": "test-string-to-time-parser",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
   "scripts": {
-    "start": "parcel index.html --open",
+    "start": "parcel index.html",
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "chrono-node": "2.9.0",
     "any-date-parser": "2.2.3",
+    "chrono-node": "2.9.0",
+    "date-fns": "4.1.0",
     "dayjs": "1.11.19",
     "fecha": "4.2.3",
     "luxon": "3.7.2",
-    "date-fns": "4.1.0"
+    "parcel-bundler": "^1.12.5"
   },
   "devDependencies": {
     "@babel/core": "7.2.0",
-    "parcel-bundler": "^1.6.1"
+    "parcel": "^2.0.0"
   },
   "keywords": []
 }
