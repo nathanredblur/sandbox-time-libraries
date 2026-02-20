@@ -103,7 +103,10 @@ const testParser = (formatter, datesArray, expectedDate = testOutputDate) => {
         return;
       }
 
-      const parsedDate = dateObj.toISOString().split("T")[0];
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const d = String(dateObj.getDate()).padStart(2, "0");
+      const parsedDate = `${y}-${m}-${d}`;
       results.push({
         pass: parsedDate === expectedDate,
         input: dateStr,
