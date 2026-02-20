@@ -1,6 +1,15 @@
 import { parse } from "fecha";
 
-export const fechaParser = (dateString) => {
+export const fechaCustomParser = (dateString) => {
+  const japaneseMatch = dateString.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+  if (japaneseMatch) {
+    return new Date(
+      parseInt(japaneseMatch[1]),
+      parseInt(japaneseMatch[2]) - 1,
+      parseInt(japaneseMatch[3]),
+    );
+  }
+
   const formats = [
     "YYYY-MM-DD",
     "MM/DD/YYYY",
@@ -25,6 +34,5 @@ export const fechaParser = (dateString) => {
     }
   }
 
-  const fallback = parse(dateString);
-  return fallback && !isNaN(fallback.getTime()) ? fallback : null;
+  return null;
 };

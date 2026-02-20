@@ -1,17 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
-    <title>Parcel Sandbox</title>
+    <title>Date Parser Benchmark</title>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
 
   <body>
-    <div id="buttonsContainer"></div>
+    <header>
+      <h1>Date Parser Benchmark</h1>
+      <p class="subtitle">
+        Comparando 6 librerías de JavaScript para convertir strings en fechas.
+        Selecciona una librería para ejecutar los
+        <strong>15 casos de prueba</strong> contra la fecha esperada
+        <code>2024-03-15</code>.
+      </p>
+      <p class="legend">
+        <span class="tag pure">Pura</span> Solo API nativa + loop de formatos
+        <span class="tag custom">Custom*</span> Con código adicional para
+        formatos faltantes
+      </p>
+    </header>
 
-    <hr />
-    <div>
-      <pre id="output"> output here </pre>
-    </div>
+    <section id="buttonsContainer" class="buttons"></section>
+
+    <section id="resultsSection" class="results hidden">
+      <div class="results-header">
+        <h2 id="activeParser"></h2>
+        <span id="scoreTag" class="score"></span>
+      </div>
+      <div id="parserInfo" class="parser-info"></div>
+      <div id="output" class="output"></div>
+    </section>
+
+    <footer>
+      <p>
+        Cada librería se carga via <code>import()</code> dinámico (code-splitting).
+        Ejecuta <code>pnpm analize</code> para ver el reporte de bundle.
+      </p>
+    </footer>
 
     <script type="module" src="src/index.js"></script>
   </body>
