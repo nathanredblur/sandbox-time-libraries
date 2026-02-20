@@ -1,5 +1,7 @@
 # sandbox-time-libraries
 
+[English version](README.en.md)
+
 Benchmark interactivo que compara **6 librerías de JavaScript** para convertir strings de fechas en objetos `Date`. El objetivo es evaluar qué tan bien cada librería maneja una variedad de formatos de fecha comunes, y cuánto espacio ocupa en el bundle final.
 
 ## Librerías evaluadas
@@ -51,19 +53,31 @@ Cada librería se prueba en dos modalidades:
 | Luxon | 14/15 | Japonés |
 | Fecha | 14/15 | Japonés |
 | ChronoJS | 13/15 | Japonés, Compacto |
-| Any-Date | 12/15 | `15/03/2024`, `15-03-2024`, `15/3/2024` (confunde DD/MM con MM/DD) |
+| Any-Date | 12/15 ⚠️ | `15/03/2024`, `15-03-2024`, `15/3/2024` (confunde DD/MM con MM/DD) |
 
 ### Versiones con código custom (\*)
 
 | Librería | Tests | Código custom agregado |
 |----------|:-----:|------------------------|
 | **ChronoJS\*** | **15/15** | Regex para formato japonés y compacto |
-| **Any-Date\*** | **15/15** | Detección y swap de DD/MM cuando día > 12 |
+| **Any-Date\*** | **15/15** | Parseo manual de formatos con `/` y `-` (ver nota abajo) |
 | **Date-fns\*** | **15/15** | Regex para formato japonés |
 | **Fecha\*** | **15/15** | Regex para formato japonés |
 | **Luxon\*** | **15/15** | Regex para formato japonés |
 
 > DayJS no necesita versión custom porque maneja todos los formatos nativamente con su plugin `customParseFormat`.
+
+### ⚠️ Nota sobre Any-Date-Parser
+
+La librería `any-date-parser@2.2.3` fue compilada con `esbuild --platform=node`. Su función `parser.attempt()` devuelve **resultados inconsistentes entre browsers** para formatos con `/` y `-` (ej: `MM/DD/YYYY`, `DD-MM-YYYY`):
+
+| Entorno | `parser.attempt("03/15/2024")` |
+|---------|-------------------------------|
+| Node.js | `{month: 3, day: 15, year: 2024}` ✅ |
+| Cursor Browser (Electron) | `{month: 3, day: 15, year: 2024}` ✅ |
+| Chrome | `{year: 2024, day: 3, month: 1}` ❌ |
+
+Por esta razón, la versión custom (`anyDate_custom.js`) parsea manualmente los formatos `XX/XX/YYYY` y `XX-XX-YYYY` sin depender de la librería para esos patrones.
 
 ## Costo de bundle (code-splitting)
 
@@ -82,6 +96,21 @@ La siguiente imagen muestra el treemap generado por `@parcel/reporter-bundle-ana
 
 ![Bundle analysis report](assets/report.png)
 
+## Veredicto
+
+| | Mejor versatilidad | Menor tamaño |
+|---|:---:|:---:|
+| **Librería** | **DayJS** | **Fecha** |
+| Tests (pura) | 15/15 | 14/15 |
+| Chunk | 11.3 KB | 4.3 KB |
+| Custom necesario | No | Solo regex para japonés |
+
+**DayJS** es la ganadora en versatilidad: pasa los 15 tests sin ningún código custom, su plugin `customParseFormat` soporta nativamente todos los formatos incluyendo japonés (`YYYY年M月D日`) con solo agregar el formato al loop. Su bundle de 11.3 KB es razonable para lo que ofrece.
+
+**Fecha** es la opción más liviana con solo 4.3 KB de bundle. Pasa 14/15 tests de forma pura y solo necesita un pequeño regex para el formato japonés en su versión custom. Si el tamaño del bundle es la prioridad y los formatos requeridos son conocidos, Fecha es la mejor opción.
+
+Las demás librerías tienen trade-offs que las hacen menos atractivas para este caso de uso: **Luxon** (82.5 KB) y **date-fns** (45 KB) son significativamente más pesadas para lograr lo mismo, **Chrono-node** (53.5 KB) es ideal solo si se necesita NLP, y **Any-Date-Parser** (18.2 KB) tiene un bug cross-browser documentado que lo hace poco confiable.
+
 ## Estructura del proyecto
 
 ```
@@ -93,14 +122,14 @@ src/
 │  Versiones puras (solo API de la librería + loop de formatos)
 ├── day.js              # DayJS (15/15)
 ├── chrono.js           # Chrono-node (13/15)
-├── anyDate.js          # Any-Date-Parser (12/15)
+├── anyDate.js          # Any-Date-Parser (12/15 ⚠️)
 ├── date-fns.js         # date-fns (14/15)
 ├── fecha.js            # Fecha (14/15)
 ├── luxon.js            # Luxon (14/15)
 │
 │  Versiones custom (código adicional para cubrir formatos faltantes)
 ├── chrono_custom.js    # + regex japonés y compacto (15/15)
-├── anyDate_custom.js   # + swap DD/MM (15/15)
+├── anyDate_custom.js   # + parseo manual de / y - (15/15)
 ├── date-fns_custom.js  # + regex japonés (15/15)
 ├── fecha_custom.js     # + regex japonés (15/15)
 └── luxon_custom.js     # + regex japonés (15/15)
